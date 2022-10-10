@@ -5,6 +5,13 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuggestionAppUI", "SuggestionAppUI\SuggestionAppUI.csproj", "{29ACE4AC-A946-4031-95A2-F36866310731}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuggestionAppLibrary", "SuggestionAppLibrary\SuggestionAppLibrary.csproj", "{55ADA072-15D8-401C-BA34-C2581C1C3D45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{492B29E7-003B-400C-A009-BF823DD44572}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{29ACE4AC-A946-4031-95A2-F36866310731}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29ACE4AC-A946-4031-95A2-F36866310731}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29ACE4AC-A946-4031-95A2-F36866310731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55ADA072-15D8-401C-BA34-C2581C1C3D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55ADA072-15D8-401C-BA34-C2581C1C3D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55ADA072-15D8-401C-BA34-C2581C1C3D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55ADA072-15D8-401C-BA34-C2581C1C3D45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
