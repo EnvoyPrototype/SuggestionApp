@@ -36,7 +36,7 @@
             <!-- Virtualize can be modified if suggestions eventually take too much memory -->
             <Virtualize Items="@suggestions" Context="s" OverscanCount="10">
                 <div>
-                    <div>
+                    <div @onclick="(() => VoteUp(s))"> 
                         <div>@GetUpvoteTopText(s)</div>
                         <span class="oi oi-caret-top"></span>
                         <div>@GetUpvoteBottomText(s)</div>
@@ -255,6 +255,39 @@
         await FilterSuggestions();
     }
 
+    private async Task VoteUp(SuggestionModel suggestion) {
+        if (loggedInUser is not null)
+        {
+            if (suggestion.Author.Id == loggedInUser.Id)
+            {
+                // Can't vote on your own suggestion
+                return;
+            }
+
+            if (suggestion.UserVotes.Add(loggedInUser.Id) == false)
+            {
+                // Clicking a second time removes vote
+                suggestion.UserVotes.Remove(loggedInUser.Id);
+            }
+
+            await suggestionData.UpvoteSuggestion(suggestion.Id, loggedInUser.Id);
+
+            if (isSortedByNew == false)
+            {
+                // Avoid unnecessary db call
+                suggestions = suggestions
+                .OrderByDescending(s => s.UserVotes.Count)
+                .ThenByDescending(s => s.DateCreated).ToList();
+            }
+
+        } 
+        else
+        {
+            // Force load if upvote clicked
+            navManager.NavigateTo("/MicrosoftIdentity/Account/SignIn", true);
+        }
+    }
+
     private string GetUpvoteTopText(SuggestionModel suggestion)
     {
         if (suggestion.UserVotes?.Count > 0)
@@ -263,7 +296,13 @@
         }
         else
         {
-            return "Click To";
+            if (suggestion.Author.Id == loggedInUser?.Id)
+            {
+                return "Awaiting";
+            } else
+            {
+                return "Click To";
+            }
         }
     }
 
