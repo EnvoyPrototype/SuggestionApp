@@ -29,31 +29,31 @@
     </div>
 </div>
 
-<div>
-    <div>
+<div class="row">
+    <div class="col-md-8 col-xl-9">
         @if (suggestions is not null)
         {
             <!-- "Lazy Loading" -->
             <!-- Virtualize can be modified if suggestions eventually take too much memory -->
             <Virtualize Items="@suggestions" Context="s" OverscanCount="10">
-                <div>
-                    <div @onclick="(() => VoteUp(s))"> 
-                        <div>@GetUpvoteTopText(s)</div>
-                        <span class="oi oi-caret-top"></span>
-                        <div>@GetUpvoteBottomText(s)</div>
+                <div class="suggestion-entry">
+                    <div class="@GetVoteClass(s)" @onclick="(() => VoteUp(s))"> 
+                        <div class="text-uppercase">@GetUpvoteTopText(s)</div>
+                        <span class="oi oi-caret-top" style="font-size: 3rem;"></span>
+                        <div class="text-uppercase">@GetUpvoteBottomText(s)</div>
                     </div>
-                    <div>
-                        <div @onclick="(() => OpenDetails(s))">
+                    <div class="suggestion-entry-text">
+                        <div class="suggestion-entry-text-title" @onclick="(() => OpenDetails(s))">
                             @s.Suggestion
                         </div>
                         <div>
-                            <div @onclick="(() => OpenDetails(s))">
+                            <div class="suggestion-entry-text-category" @onclick="(() => OpenDetails(s))">
                                 @s.Category?.CategoryName
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div>
+                    <div class="suggestion-entry-status @GetSuggestionStatusClass(s)">
+                        <div class="suggestion-entry-status-class">
                             @s.SuggestionStatus?.StatusName
                         </div>
                     </div>
@@ -61,26 +61,26 @@
             </Virtualize>
         }
     </div>
-    <div>
+    <div class="col-md-4 col-xl-3">
         @if (categories is not null)
         {
-            <div>
-                <span>Category</span>
-                <div @onclick="(() => OnCategoryClick())">All</div>
+            <div class="categories">
+                <span class="text-uppercase fw-bold">Category</span>
+                <div class="@GetSelectedCategory()" @onclick="(() => OnCategoryClick())">All</div>
                 @foreach(var c in categories)
                 {
-                    <div @onclick="(() => OnCategoryClick(c.CategoryName))">@c.CategoryName</div>
+                    <div class="@GetSelectedCategory(c.CategoryName)" @onclick="(() => OnCategoryClick(c.CategoryName))">@c.CategoryName</div>
                 }
             </div>
         }
         @if (statuses is not null)
         {
-            <div>
-                <span>Status</span>
-                <div @onclick="(() => OnStatusClick())">All</div>
+            <div class="statuses">
+                <span class="text-uppercase fw-bold">Status</span>
+                <div class="@GetSelectedStatus()" @onclick="(() => OnStatusClick())">All</div>
                 @foreach (var s in statuses)
                 {
-                    <div @onclick="(() => OnStatusClick(s.StatusName))">@s.StatusName</div>
+                    <div class="@GetSelectedStatus(s.StatusName)" @onclick="(() => OnStatusClick(s.StatusName))">@s.StatusName</div>
                 }
             </div>
         }
@@ -339,13 +339,76 @@
 
     private string SortedByNewClass(bool isNew)
     {
-            if (isNew == isSortedByNew)
-            {
-                return "sort-selected";
-            }
-            else
-            {
-                return "";
-            }
+        if (isNew == isSortedByNew)
+        {
+            return "sort-selected";
         }
+        else
+        {
+            return "";
+        }
+    }
+
+    private string GetVoteClass(SuggestionModel suggestion)
+    {
+        if (suggestion.UserVotes is null || suggestion.UserVotes.Count == 0)
+        {
+            return "suggestion-entry-no-votes";
+        }
+
+        else if (suggestion.UserVotes.Contains(loggedInUser?.Id))
+        {
+            return "suggestion-entry-voted";
+        }
+        else
+        {
+            return "suggestion-entry-not-voted";
+        }
+    }
+
+    private string GetSuggestionStatusClass(SuggestionModel suggestion) 
+    {
+        if (suggestion is null || suggestion.SuggestionStatus is null)
+        {
+            return "suggestion-entry-status-none";
+        }
+
+        string output = suggestion.SuggestionStatus.StatusName switch
+        {
+            "Completed" => "suggestion-entry-statusData-completed",
+            "Watching" => "suggestion-entry-statusData-watching",
+            "Upcoming" => "suggestion-entry-statusData-upcoming",
+            "Dismissed" => "suggestion-entry-statusData-dismissed",
+            _ => "suggestion-entry-status-none",
+
+        };
+
+        return output;
+    }
+
+    private string GetSelectedCategory(string category = "All") 
+    {
+        if (category == selectedCategory)
+        {
+            return "selected-caregory";
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+
+
+    private string GetSelectedStatus(string status = "All")
+    {
+        if (status == selectedStatus)
+        {
+            return "selected-status";
+        }
+        else
+        {
+            return "";
+        }
+    }
 }
