@@ -9,21 +9,22 @@
 @*// Keeps settings while navigating*@
 @inject ProtectedSessionStorage sessionStorage
 
-<h1>Training Suggestions</h1>
-<div>
-    <button>Suggest</button>
+<h1 class="page-heading text-uppercase mb-4">Training Suggestions</h1>
+<div class="suggestion-container">
+    <button @onclick="LoadCreatePage" class="suggest-btn btn btn-outline-light btn-lg text-uppercase">Suggest</button>
 </div>
 
-<div>
-    <div>@suggestions?.Count Suggestions</div>
-    <div>
-        <button @onclick="(() => OrderByNew(true))">New</button>
-        <button @onclick="(() => OrderByNew(false))">Popular</button>
+<div class="row">
+    <div class="suggestions-count col-md-4 text-light mt-2">@suggestions?.Count Suggestions</div>
+    <div class="col-md-4 col-xl-5 btn-group">
+    
+        <button class="btn btn-order @SortedByNewClass(true)" @onclick="(() => OrderByNew(true))">New</button>
+            <button class="btn btn-order @SortedByNewClass(false)" @onclick="(() => OrderByNew(false))">Popular</button>
     </div>
-    <div>
+    <div class="col-md-4 col-xl-3 search-box">
         <!-- Live search box -->
         <input type="text" placeholder="Search" 
-            aria-label="Search Box" 
+            aria-label="Search Box" class="form-control rounded-control" 
             @oninput="((txt) => OnSearchInput((string)txt.Value))" />
     </div>
 </div>
@@ -102,6 +103,19 @@
         categories = await categoryData.GetAllCategories();
         statuses = await statusData.GetAllStatuses();
         await LoadAndVerifyUser();
+    }
+
+    private void LoadCreatePage() 
+    {
+        if (loggedInUser is not null)
+        {
+            navManager.NavigateTo("/Create");
+        }
+        else
+        {
+            // Forced load
+            navManager.NavigateTo("/MicrosoftIdentity/Account/SignIn", true);
+        }
     }
 
     private async Task LoadAndVerifyUser()
@@ -322,4 +336,16 @@
     {
         navManager.NavigateTo($"/Details/{suggestion.Id}");
     }
+
+    private string SortedByNewClass(bool isNew)
+    {
+            if (isNew == isSortedByNew)
+            {
+                return "sort-selected";
+            }
+            else
+            {
+                return "";
+            }
+        }
 }
