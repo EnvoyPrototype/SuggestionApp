@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="suggestion-entry-status @GetSuggestionStatusClass(s)">
-                        <div class="suggestion-entry-status-class">
+                        <div class="suggestion-entry-status-text">
                             @s.SuggestionStatus?.StatusName
                         </div>
                     </div>
@@ -375,10 +375,10 @@
 
         string output = suggestion.SuggestionStatus.StatusName switch
         {
-            "Completed" => "suggestion-entry-statusData-completed",
-            "Watching" => "suggestion-entry-statusData-watching",
-            "Upcoming" => "suggestion-entry-statusData-upcoming",
-            "Dismissed" => "suggestion-entry-statusData-dismissed",
+            "Completed" => "suggestion-entry-status-completed",
+            "Watching" => "suggestion-entry-status-watching",
+            "Upcoming" => "suggestion-entry-status-upcoming",
+            "Dismissed" => "suggestion-entry-status-dismissed",
             _ => "suggestion-entry-status-none",
 
         };
